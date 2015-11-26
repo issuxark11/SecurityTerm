@@ -20,7 +20,7 @@ public class ConfigActivity extends Activity {
         OnBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ConfigActivity.this, ScreenReceiver.class);
+                Intent intent = new Intent(ConfigActivity.this, ScreenService.class);
                 startService(intent);
                 ConfigActivity.this.finish();
             }
@@ -29,7 +29,7 @@ public class ConfigActivity extends Activity {
         OffBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ConfigActivity.this, ScreenReceiver.class);
+                Intent intent = new Intent(ConfigActivity.this, ScreenService.class);
                 stopService(intent);
                 ConfigActivity.this.finish();
             }
