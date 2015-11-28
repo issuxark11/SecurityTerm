@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
-import android.view.View;
 
 import java.util.Set;
 
@@ -19,9 +18,22 @@ public class ScreenReceiver extends BroadcastReceiver {
     private BluetoothAdapter mBtAdapter;
     private TelephonyManager telephonyManager = null;
     private boolean isPhoneIdle = true;
-
+    private boolean isBluetoothConnection = false;
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        if (intent.getAction().equals(BluetoothDevice.ACTION_ACL_CONNECTED)) {
+            isBluetoothConnection = true;
+        }
+
+        if (intent.getAction().equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
+            isBluetoothConnection = false;
+        }
+
+        if (intent.getAction().equals(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED)) {
+            isBluetoothConnection = false;
+        }
+
         if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
             screenoff = true;
 
@@ -40,23 +52,27 @@ public class ScreenReceiver extends BroadcastReceiver {
 
                 // If there are paired devices, add each one to the ArrayAdapter
                 if (pairedDevices.size() > 0) {
-                    Intent changeIntent = new Intent(context, MainActivity.class);
-                    //changeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    //context.startActivity(changeIntent);
+                    if(isBluetoothConnection == true) {
+                        Intent changeIntent = new Intent(context, MainActivity.class);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, changeIntent, 0);
 
-                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, changeIntent, 0);
+                        try {
+                            pendingIntent.send();
+                        } catch (Exception ex) {
 
-                    try {
-                        pendingIntent.send();
-                    } catch (Exception ex) {
+                        }
+                    } else if (isBluetoothConnection == false) {
+                        Intent changeIntent = new Intent(context, PasswordActivity.class);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, changeIntent, 0);
 
+                        try {
+                            pendingIntent.send();
+                        } catch (Exception ex) {
+
+                        }
                     }
-
                 } else {
                     Intent changeIntent = new Intent(context, PasswordActivity.class);
-                    //changeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    //context.startActivity(changeIntent);
-
                     PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, changeIntent, 0);
 
                     try {
@@ -65,8 +81,6 @@ public class ScreenReceiver extends BroadcastReceiver {
 
                     }
                 }
-
-
             } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
                 screenoff = false;
             }
