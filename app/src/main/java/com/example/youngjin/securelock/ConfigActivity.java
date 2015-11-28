@@ -81,8 +81,7 @@ public class ConfigActivity extends Activity {
 
         // Initialize array adapters. One for already paired devices and
         // one for newly discovered devices
-        ArrayAdapter<String> pairedDevicesArrayAdapter =
-                new ArrayAdapter<String>(this, R.layout.device_name);
+        ArrayAdapter<String> pairedDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
         mNewDevicesArrayAdapter = new ArrayAdapter<String>(this, R.layout.device_name);
 
         // Find and set up the ListView for paired devices
@@ -90,6 +89,7 @@ public class ConfigActivity extends Activity {
         pairedListView.setAdapter(pairedDevicesArrayAdapter);
         pairedListView.setOnItemClickListener(mDeviceClickListener);
 
+        /*
         // Find and set up the ListView for newly discovered devices
         ListView newDevicesListView = (ListView) findViewById(R.id.new_devices);
         newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
@@ -102,6 +102,7 @@ public class ConfigActivity extends Activity {
         // Register for broadcasts when discovery has finished
         filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         this.registerReceiver(mReceiver, filter);
+        */
 
         // Get the local Bluetooth adapter
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -119,6 +120,13 @@ public class ConfigActivity extends Activity {
             String noDevices = getResources().getText(R.string.none_paired).toString();
             pairedDevicesArrayAdapter.add(noDevices);
         }
+
+        IntentFilter filter1 = new IntentFilter(BluetoothDevice.ACTION_ACL_CONNECTED);
+        IntentFilter filter2 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
+        IntentFilter filter3 = new IntentFilter(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        this.registerReceiver(mReceiver, filter1);
+        this.registerReceiver(mReceiver, filter2);
+        this.registerReceiver(mReceiver, filter3);
     }
     @Override
     protected void onDestroy() {
@@ -192,7 +200,8 @@ public class ConfigActivity extends Activity {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 // If it's already paired, skip it, because it's been listed already
                 if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
-                    mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+                    short rssi = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI,  Short.MIN_VALUE);
+                    mNewDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress() + " (RSSI : "+rssi +"dBm)");
                 }
                 // When discovery is finished, change the Activity title
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
@@ -202,6 +211,14 @@ public class ConfigActivity extends Activity {
                     String noDevices = getResources().getText(R.string.none_found).toString();
                     mNewDevicesArrayAdapter.add(noDevices);
                 }
+            } else if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
+                Intent sIntent = new Intent(ConfigActivity.this, ScreenService.class);
+                startService(sIntent);
+                ConfigActivity.this.finish();
+            } else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action)) {
+                Intent sIntent = new Intent(ConfigActivity.this, ScreenService.class);
+                stopService(sIntent);
+                ConfigActivity.this.finish();
             }
         }
     };

@@ -1,16 +1,22 @@
 package com.example.youngjin.securelock;
 
 import android.app.PendingIntent;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.view.View;
+
+import java.util.Set;
 
 public class ScreenReceiver extends BroadcastReceiver {
 
     public static boolean screenoff;
 
+    private BluetoothAdapter mBtAdapter;
     private TelephonyManager telephonyManager = null;
     private boolean isPhoneIdle = true;
 
@@ -25,17 +31,41 @@ public class ScreenReceiver extends BroadcastReceiver {
             }
 
             if (isPhoneIdle) {
-                Intent changeIntent = new Intent(context, MainActivity.class);
-                //changeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                //context.startActivity(changeIntent);
+                // Get the local Bluetooth adapter
 
-                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, changeIntent, 0);
+                mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
-                try {
-                    pendingIntent.send();
-                } catch (Exception ex) {
+                // Get a set of currently paired devices
+                Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
 
+                // If there are paired devices, add each one to the ArrayAdapter
+                if (pairedDevices.size() > 0) {
+                    Intent changeIntent = new Intent(context, MainActivity.class);
+                    //changeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    //context.startActivity(changeIntent);
+
+                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, changeIntent, 0);
+
+                    try {
+                        pendingIntent.send();
+                    } catch (Exception ex) {
+
+                    }
+
+                } else {
+                    Intent changeIntent = new Intent(context, PasswordActivity.class);
+                    //changeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    //context.startActivity(changeIntent);
+
+                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, changeIntent, 0);
+
+                    try {
+                        pendingIntent.send();
+                    } catch (Exception ex) {
+
+                    }
                 }
+
 
             } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
                 screenoff = false;
