@@ -1,21 +1,40 @@
 package com.example.youngjin.securelock;
 
 import android.app.PendingIntent;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.widget.Toast;
+
+import java.util.Set;
 
 public class ScreenReceiver extends BroadcastReceiver {
 
     public static boolean screenoff;
 
+    private BluetoothAdapter mBtAdapter;
     private TelephonyManager telephonyManager = null;
     private boolean isPhoneIdle = true;
-
+    private boolean isBluetoothConnection = false;
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        if (intent.getAction().equals(BluetoothDevice.ACTION_ACL_CONNECTED)) {
+            isBluetoothConnection = true;
+        }
+
+        if (intent.getAction().equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
+            isBluetoothConnection = false;
+        }
+
+        if (intent.getAction().equals(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED)) {
+            isBluetoothConnection = false;
+        }
+
         if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
             screenoff = true;
 
@@ -25,18 +44,46 @@ public class ScreenReceiver extends BroadcastReceiver {
             }
 
             if (isPhoneIdle) {
-                Intent changeIntent = new Intent(context, MainActivity.class);
-                //changeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                //context.startActivity(changeIntent);
+                // Get the local Bluetooth adapter
 
-                PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, changeIntent, 0);
+                mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
-                try {
-                    pendingIntent.send();
-                } catch (Exception ex) {
+                // Get a set of currently paired devices
+                Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
 
+                // If there are paired devices, add each one to the ArrayAdapter
+                if (pairedDevices.size() > 0) {
+                    if(isBluetoothConnection == true) {
+
+                        Intent changeIntent = new Intent(context, MainActivity.class);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, changeIntent, 0);
+
+
+                        try {
+                            pendingIntent.send();
+                        } catch (Exception ex) {
+
+                        }
+                    } else if (isBluetoothConnection == false) {
+                        Intent changeIntent = new Intent(context, PasswordActivity.class);
+                        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, changeIntent, 0);
+
+                        try {
+                            pendingIntent.send();
+                        } catch (Exception ex) {
+
+                        }
+                    }
+                } else {
+                    Intent changeIntent = new Intent(context, PasswordActivity.class);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, changeIntent, 0);
+
+                    try {
+                        pendingIntent.send();
+                    } catch (Exception ex) {
+
+                    }
                 }
-
             } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
                 screenoff = false;
             }
