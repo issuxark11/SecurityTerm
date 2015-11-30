@@ -26,7 +26,6 @@ public class ScreenReceiver extends BroadcastReceiver {
         if (intent.getAction().equals(BluetoothDevice.ACTION_ACL_CONNECTED)) {
             isBluetoothConnection = true;
         }
-
         if (intent.getAction().equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
             isBluetoothConnection = false;
         }
@@ -64,7 +63,7 @@ public class ScreenReceiver extends BroadcastReceiver {
                         } catch (Exception ex) {
 
                         }
-                    } else if (isBluetoothConnection == false) {
+                    } else {
                         Intent changeIntent = new Intent(context, PasswordActivity.class);
                         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, changeIntent, 0);
 
