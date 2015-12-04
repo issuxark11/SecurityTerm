@@ -1,7 +1,10 @@
 package com.example.youngjin.securelock;
 
 import android.app.Service;
+<<<<<<< HEAD
 import android.bluetooth.BluetoothAdapter;
+=======
+>>>>>>> a2cd50528e153cba63bcce83e9200b878a583741
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -22,8 +25,12 @@ public class ScreenService extends Service { // Service Component
         filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECT_REQUESTED);
 
         sReceiver = new ScreenReceiver();
+<<<<<<< HEAD
         registerReceiver(sReceiver, filter); // Detect Screen on/off, Bluetooth Connection and create BroadcastReceiver
 
+=======
+        registerReceiver(sReceiver, filter);
+>>>>>>> a2cd50528e153cba63bcce83e9200b878a583741
         Toast toast = Toast.makeText(this, "Start LockScreen Service", Toast.LENGTH_SHORT);
         toast.show();
     }

@@ -16,7 +16,6 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 
 public class ConfigActivity extends Activity {
-
     private Button OnBtn, OffBtn;
     private Button bluetooth_menu, password_set;
 
@@ -25,12 +24,20 @@ public class ConfigActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_config);
 
+        // Set result CANCELED in case the user backs out
+        setResult(Activity.RESULT_CANCELED);
+
+        // Initialize Button
         OnBtn = (Button) findViewById(R.id.onBtn);
         OffBtn = (Button) findViewById(R.id.offBtn);
 
+<<<<<<< HEAD
         bluetooth_menu = (Button) findViewById(R.id.bluetooth_set);
         password_set = (Button) findViewById(R.id.password_set);
 
+=======
+        // Screen On/Off Service Button
+>>>>>>> a2cd50528e153cba63bcce83e9200b878a583741
         OnBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

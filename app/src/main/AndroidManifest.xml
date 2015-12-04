@@ -25,6 +25,7 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
 
+<<<<<<< HEAD
             </intent-filter>
         </activity>
         <activity
@@ -40,10 +41,15 @@
         <activity android:name=".ChangePasswordActivity1" />
         <activity android:name=".ChangePasswordActivity2" />
         <activity android:name=".ChangePasswordActivity3" />
+=======
+        <activity android:name=".MainActivity" />
+>>>>>>> a2cd50528e153cba63bcce83e9200b878a583741
         <activity android:name=".PasswordActivity" />
         <service android:name=".ScreenService" />
         <receiver android:name=".ScreenReceiver" />
     </application>
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 </manifest>
