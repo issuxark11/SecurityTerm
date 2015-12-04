@@ -22,13 +22,10 @@ public class MainActivity extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD); // 순정 잠금 화면 없애기
         setContentView(R.layout.activity_main);
 
-
-        //밀어서 잠금해제
+        //Seekbar Start
         seekBar = (SeekBar) findViewById(R.id.seekBar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-
-                                               @Override
+        @Override
 
                                                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                                                }
@@ -39,7 +36,7 @@ public class MainActivity extends Activity {
 
                                                @Override
                                                public void onStopTrackingTouch(SeekBar seekBar) {
-                                                   // 80 % 이상 간격에 들어오면 잠금을 해제
+                                                   // If progress>=80, finish this(lock screen), else, initialize progress
                                                    if (seekBar.getProgress() >= 80) {
                                                        finish();
                                                    } else {
@@ -47,12 +44,12 @@ public class MainActivity extends Activity {
                                                    }
                                                }
                                            }
-        );
+        );                                               
+
         seekBar.setOnTouchListener(new SeekBar.OnTouchListener() {
 
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                //손 떼면 progress 초기화
+            public boolean onTouch(View v, MotionEvent event) {//When user take one's finger away from screen, initialize progress.
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     seekBar.setProgress(0);
                 }

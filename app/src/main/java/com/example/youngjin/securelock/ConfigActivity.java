@@ -28,7 +28,6 @@ public class ConfigActivity extends Activity {
         OnBtn = (Button) findViewById(R.id.onBtn);
         OffBtn = (Button) findViewById(R.id.offBtn);
 
-        //비밀번호 테스트 화면으로
         bluetooth_menu = (Button) findViewById(R.id.bluetooth_set);
         password_set = (Button) findViewById(R.id.password_set);
 
@@ -67,7 +66,9 @@ public class ConfigActivity extends Activity {
         });
         password_set.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {// Check if there is password in the file or not.
+                                         
+                //File read start
                 try {
                     FileInputStream fis = openFileInput("test1.txt");
                     byte[] data = new byte[fis.available()];
@@ -80,11 +81,11 @@ public class ConfigActivity extends Activity {
 
                     String data_s = new String(data);
 
-                    if (data_s == "") {
+                    if (data_s == "") {//If there's no password in file(null), let user set password directly.
                         Intent intent = new Intent().setClass(ConfigActivity.this, ChangePasswordActivity2.class);
                         startActivity(intent);
 
-                    } else {
+                    } else {//If there's password in file, check if the user know password.
                         Intent intent = new Intent().setClass(ConfigActivity.this, ChangePasswordActivity1.class);
                         startActivity(intent);
                     }

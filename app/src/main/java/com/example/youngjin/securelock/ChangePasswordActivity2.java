@@ -27,8 +27,8 @@ public class ChangePasswordActivity2 extends Activity implements OnClickListener
 
 
     Button button0, button1, button2, button3, button4, button5, button6, button7, button8, button9, my_insert, reset;
-    int count =0; //비밀번호 수
-    String current_pw;
+    int count =0; //Input count
+    String current_pw; //Input
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,8 +44,8 @@ public class ChangePasswordActivity2 extends Activity implements OnClickListener
         button7 = (Button) findViewById(R.id.button7);
         button8 = (Button) findViewById(R.id.button8);
         button9 = (Button) findViewById(R.id.button9);
-        my_insert = (Button) findViewById(R.id.my_insert);
-        reset = (Button) findViewById(R.id.reset);
+        my_insert = (Button) findViewById(R.id.my_insert); //Submit button
+        reset = (Button) findViewById(R.id.reset); //Reset button
 
         button0.setOnClickListener(this);
         button1.setOnClickListener(this);
@@ -62,7 +62,7 @@ public class ChangePasswordActivity2 extends Activity implements OnClickListener
 
     }
     @Override
-    protected void onPause() {
+    protected void onPause() {//If other activity starts, finish this activity.
         super.onPause();
         this.finish();
     }
@@ -73,14 +73,14 @@ public class ChangePasswordActivity2 extends Activity implements OnClickListener
         if(v.getId()==R.id.button0) {
             String content = new String("0");
             count++;
-            if (count == 1) {
+            if (count == 1) {//First input
                 current_pw = content;
-            }//비밀번호 하나 받았을 때
-            else if(count>4) {
+            }
+            else if(count>4) {//If the number of input becomes 5, initialize input text and count. 
                 current_pw = "";
                 count=0;
             }
-            else if(count==4){
+            else if(count==4){//If the number of input becomes 4, suggest user to submit.
                 current_pw = current_pw + content;
                 Toast.makeText(this, "제출하세요", Toast.LENGTH_SHORT).show();
             }
@@ -93,7 +93,7 @@ public class ChangePasswordActivity2 extends Activity implements OnClickListener
             count++;
             if (count == 1) {
                 current_pw = content;
-            }//비밀번호 하나 받았을 때
+            }
             else if(count>4) {
                 current_pw = "";
                 count=0;
@@ -111,7 +111,7 @@ public class ChangePasswordActivity2 extends Activity implements OnClickListener
             count++;
             if (count == 1) {
                 current_pw = content;
-            }//비밀번호 하나 받았을 때
+            }
             else if(count>4) {
                 current_pw = "";
                 count=0;
@@ -129,7 +129,7 @@ public class ChangePasswordActivity2 extends Activity implements OnClickListener
             count++;
             if (count == 1) {
                 current_pw = content;
-            }//비밀번호 하나 받았을 때
+            }
             else if(count>4) {
                 current_pw = "";
                 count=0;
@@ -147,7 +147,7 @@ public class ChangePasswordActivity2 extends Activity implements OnClickListener
             count++;
             if (count == 1) {
                 current_pw = content;
-            }//비밀번호 하나 받았을 때
+            }
             else if(count>4) {
                 current_pw = "";
                 count=0;
@@ -165,7 +165,7 @@ public class ChangePasswordActivity2 extends Activity implements OnClickListener
             count++;
             if (count == 1) {
                 current_pw = content;
-            }//비밀번호 하나 받았을 때
+            }
             else if(count>4) {
                 current_pw = "";
                 count=0;
@@ -183,7 +183,7 @@ public class ChangePasswordActivity2 extends Activity implements OnClickListener
             count++;
             if (count == 1) {
                 current_pw = content;
-            }//비밀번호 하나 받았을 때
+            }
             else if(count>4) {
                 current_pw = "";
                 count=0;
@@ -201,7 +201,7 @@ public class ChangePasswordActivity2 extends Activity implements OnClickListener
             count++;
             if (count == 1) {
                 current_pw = content;
-            }//비밀번호 하나 받았을 때
+            }
             else if(count>4) {
                 current_pw = "";
                 count=0;
@@ -219,7 +219,7 @@ public class ChangePasswordActivity2 extends Activity implements OnClickListener
             count++;
             if (count == 1) {
                 current_pw = content;
-            }//비밀번호 하나 받았을 때
+            }
             else if(count>4) {
                 current_pw = "";
                 count=0;
@@ -237,7 +237,7 @@ public class ChangePasswordActivity2 extends Activity implements OnClickListener
             count++;
             if (count == 1) {
                 current_pw = content;
-            }//비밀번호 하나 받았을 때
+            }
             else if(count>4) {
                 current_pw = "";
                 count=0;
@@ -256,28 +256,35 @@ public class ChangePasswordActivity2 extends Activity implements OnClickListener
         }
         else if(v.getId()==R.id.my_insert){
             if(count==4) {
+                
                 try {
-                    FileOutputStream fos = openFileOutput("test1.txt", Context.MODE_WORLD_READABLE);
-                    String text = current_pw;//이걸 암호화 하시고 밑에 text.getBytes()를 암호화된변수이름.getBytes() 으로 바꾸시면 돼요.
-                    KeyGenerator gen = KeyGenerator.getInstance("AES"); // AES를 이용한 암호화
-                    byte[] key = "ISterm_WAE*".getBytes();
-                    key = Arrays.copyOf(key, 16);
-                    Key secureKey = new SecretKeySpec(key, "AES"); // 암호화 키 생성
+                    //File write start
+                    FileOutputS
+                    tream fos = openFileOutput("test2.txt", Context.MODE_WORLD_READABLE);
+                    String text = current_pw;
 
-                    Cipher cipher = Cipher.getInstance("AES");
-                    cipher.init(Cipher.ENCRYPT_MODE, secureKey);
-                    byte[] encryptedData = cipher.doFinal(text.getBytes());
 
-                    fos.write(encryptedData);
+                    byte[] key = "ISterm_WAE*".getBytes();           // static private key
+                    key = Arrays.copyOf(key, 16);                       // because of AES-128, copy only 16bytes.
+                    Key secureKey = new SecretKeySpec(key, "AES"); // generates secure key 
+
+                    Cipher cipher = Cipher.getInstance("AES");  // get AES instance 
+                    cipher.init(Cipher.ENCRYPT_MODE, secureKey);// encrypt mode setting
+                    byte[] encryptedData = cipher.doFinal(text.getBytes()); // encrypt normal text password to encrypted byte data
+
+                    fos.write(encryptedData);  // write encrypted data into file
                     fos.close();
+
+                    //After writing text into the file, Start next activity.
                     Intent intent = new Intent().setClass(ChangePasswordActivity2.this, ChangePasswordActivity3.class);
                     startActivity(intent);
+
                 } catch (Exception e) {
                     Toast toast = Toast.makeText(this, "exception : " + e, Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }
-            else {
+            else {//If the number of input!=4, suggest user to set again.
                 Toast toast = Toast.makeText(this, "4자리가 아닙니다.", Toast.LENGTH_SHORT);
                 toast.show();
                 current_pw="";
