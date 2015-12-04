@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.youngjin.securelock">
 
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -15,8 +18,29 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+       <!-- <activity
+            android:name="com.example.youngjin.securelock.PasswordActivity"
+            android:label="SecureLock">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
 
-        <activity android:name=".MainActivity" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.youngjin.securelock.SetPasswordActivity"
+            android:label="SecureLock">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+
+            </intent-filter>
+        </activity>-->
+        <activity android:name=".MainActivity"/>
+        <activity android:name=".ChangePasswordActivity1" />
+        <activity android:name=".ChangePasswordActivity2" />
+        <activity android:name=".ChangePasswordActivity3" />
+        <activity android:name=".PasswordActivity" />
         <service android:name=".ScreenService" />
         <receiver android:name=".ScreenReceiver" />
     </application>
